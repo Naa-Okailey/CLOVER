@@ -24,8 +24,9 @@ from typing import Any, Dict, List
 
 import yaml  # pylint: disable=import-error
 
-from ..__utils__ import get_logger, read_yaml, TOKEN
-from ..fileparser import GLOBAL_SETTINGS_FILE
+from ..__utils__ import get_logger, read_yaml
+from ..fileparser import GENERATION_INPUTS_FILE, INPUTS_DIRECTORY, LOCATIONS_FOLDER_NAME
+from ..generation.__utils__ import TOKEN
 
 __all__ = ("main",)
 
@@ -78,9 +79,14 @@ def main(args: List[Any]) -> None:
         raise Exception("The renewables.ninja API token must be specifeid.")
 
     # Check whether the generation file exists.
-    global_settings_file_path = GLOBAL_SETTINGS_FILE
+    generation_file_path = os.path.join(
+        LOCATIONS_FOLDER_NAME,
+        parsed_args.location,
+        INPUTS_DIRECTORY,
+        GENERATION_INPUTS_FILE,
+    )
 
-    if not os.path.isfile(global_settings_file_path):
+    if not os.path.isfile(generation_file_path):
         raise FileNotFoundError(
             "The generation inputs file could not be found within the location "
             f"{parsed_args.location}.",
@@ -89,17 +95,15 @@ def main(args: List[Any]) -> None:
     # Attempt to update the token.
     filedata: Dict[str, Any]
     try:
-        filedata = read_yaml(global_settings_file_path, logger)  # type: ignore
+        filedata = read_yaml(generation_file_path, logger)  # type: ignore
     except Exception:
-        logger.error(
-            "Error reading generation inputs file '%s'.", global_settings_file_path
-        )
+        logger.error("Error reading generation inputs file '%s'.", generation_file_path)
         raise
 
     filedata[TOKEN] = parsed_args.token
 
     logger.info("Attempting to save updated token to the generation inputs file.")
-    with open(global_settings_file_path, "w") as f:
+    with open(generation_file_path, "w") as f:
         yaml.dump(filedata, f)
     logger.info("Updated API token successfully saved.")
 

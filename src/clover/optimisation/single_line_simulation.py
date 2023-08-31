@@ -381,7 +381,6 @@ def single_line_simulation(  # pylint: disable=too-many-locals, too-many-stateme
                 end_year,
                 finance_inputs,
                 ghg_inputs,
-                minigrid.inverter,
                 location,
                 logger,
                 previous_system,

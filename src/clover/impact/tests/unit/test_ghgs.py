@@ -18,7 +18,6 @@ from unittest import mock
 
 import pandas as pd
 
-from ....__utils__ import Inverter
 from ...ghgs import _calculate_inverter_ghgs
 
 
@@ -64,7 +63,6 @@ class _BaseGHGsTest(unittest.TestCase):
             },
             "storage": {"ghgs": 110, "o&m": 5, "ghg_decrease": 5},
         }
-        self.inverter = Inverter(lifetime=4, size_increment=1)
         self.location = mock.Mock(max_years=20)
         self.logger = mock.MagicMock()
         self.yearly_load_statistics = pd.DataFrame(
@@ -155,7 +153,6 @@ class TestInverterExpenditure(_BaseGHGsTest):
                 self.yearly_load_statistics,
                 20,
                 self.ghg_inputs,
-                self.inverter,
                 self.location,
                 self.logger,
                 scenario,
@@ -170,7 +167,6 @@ class TestInverterExpenditure(_BaseGHGsTest):
                 self.yearly_load_statistics,
                 3,
                 self.ghg_inputs,
-                self.inverter,
                 self.location,
                 self.logger,
                 scenario,
@@ -191,7 +187,6 @@ class TestInverterExpenditure(_BaseGHGsTest):
                 self.yearly_load_statistics,
                 2,
                 self.ghg_inputs,
-                self.inverter,
                 self.location,
                 self.logger,
                 scenario,
@@ -204,7 +199,6 @@ class TestInverterExpenditure(_BaseGHGsTest):
                 self.yearly_load_statistics,
                 20,
                 self.ghg_inputs,
-                self.inverter,
                 self.location,
                 self.logger,
                 scenario,
@@ -219,7 +213,6 @@ class TestInverterExpenditure(_BaseGHGsTest):
                 self.yearly_load_statistics,
                 3,
                 self.ghg_inputs,
-                self.inverter,
                 self.location,
                 self.logger,
                 scenario,
